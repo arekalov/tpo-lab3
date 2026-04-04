@@ -1,6 +1,7 @@
 package com.arekalov.tpolab3
 
 import io.github.bonigarcia.wdm.WebDriverManager
+import me.bramar.undetectedselenium.SeleniumStealthOptions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.openqa.selenium.WebDriver
@@ -26,7 +27,16 @@ abstract class BaseTest {
             }
             else -> {
                 WebDriverManager.chromedriver().setup()
-                ChromeDriver(ChromeOptions())
+                val options = ChromeOptions().apply {
+                    addArguments("--disable-blink-features=AutomationControlled")
+                    addArguments("--no-sandbox")
+                    addArguments("--disable-dev-shm-usage")
+                    addArguments("--disable-infobars")
+                    addArguments("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36")
+                    setExperimentalOption("excludeSwitches", listOf("enable-automation", "enable-logging"))
+                    setExperimentalOption("useAutomationExtension", false)
+                }
+                ChromeDriver(options).also { SeleniumStealthOptions.getDefault().apply(it) }
             }
         }
         wait = WebDriverWait(driver, Duration.ofSeconds(15))

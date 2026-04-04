@@ -25,7 +25,6 @@ class AuthTest : BaseTest() {
                 )
             )
         )
-        Thread.sleep(10000)
         assertTrue(mainPage.isLoggedIn(), "User should be logged in after successful authentication")
     }
 

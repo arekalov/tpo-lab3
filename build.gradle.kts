@@ -7,14 +7,18 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.20.0")
-    testImplementation("io.github.bonigarcia:webdrivermanager:5.8.0")
+    testImplementation("org.seleniumhq.selenium:selenium-java:4.41.0")
+    testImplementation("io.github.bonigarcia:webdrivermanager:5.9.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
+    testImplementation("com.github.bramar2:undetectedselenium:d7d9b0ff42")
+    testImplementation("com.google.code.gson:gson:2.10.1")
+    testRuntimeOnly("org.slf4j:slf4j-simple:2.0.13")
 }
 
 tasks.test {
