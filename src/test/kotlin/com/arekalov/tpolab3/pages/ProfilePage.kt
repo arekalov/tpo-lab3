@@ -8,13 +8,25 @@ import java.time.Duration
 
 class ProfilePage(private val driver: WebDriver) {
 
+    companion object {
+        private const val URL_USERS_TEMPLATE = "https://stackoverflow.com/users/"
+        private const val XPATH_DISPLAY_NAME =
+            "//div[contains(@class,'grid--cell fl1')]//div[@class='fs-headline2 fw-bold'] | //h1[contains(@class,'fs-headline')]"
+        private const val XPATH_REPUTATION =
+            "//div[contains(@class,'js-user-rep') or @itemprop='description']"
+        private const val XPATH_QUESTIONS_TAB = "//a[contains(@href,'?tab=questions')]"
+        private const val XPATH_ANSWERS_TAB = "//a[contains(@href,'?tab=answers')]"
+        private const val XPATH_PROFILE_NAV =
+            "//a[contains(@href,'/users/') and contains(@class,'avatar')]"
+    }
+
     private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
-    private val displayName = By.xpath("//div[contains(@class,'grid--cell fl1')]//div[@class='fs-headline2 fw-bold'] | //h1[contains(@class,'fs-headline')]")
-    private val reputationBadge = By.xpath("//div[contains(@class,'js-user-rep') or @itemprop='description']")
-    private val questionsTab = By.xpath("//a[contains(@href,'?tab=questions')]")
-    private val answersTab = By.xpath("//a[contains(@href,'?tab=answers')]")
-    private val profileNavLink = By.xpath("//a[contains(@href,'/users/') and contains(@class,'avatar')]")
+    private val displayName = By.xpath(XPATH_DISPLAY_NAME)
+    private val reputationBadge = By.xpath(XPATH_REPUTATION)
+    private val questionsTab = By.xpath(XPATH_QUESTIONS_TAB)
+    private val answersTab = By.xpath(XPATH_ANSWERS_TAB)
+    private val profileNavLink = By.xpath(XPATH_PROFILE_NAV)
 
     fun openCurrentUser(): ProfilePage {
         val link = wait.until(ExpectedConditions.elementToBeClickable(profileNavLink))
@@ -23,7 +35,7 @@ class ProfilePage(private val driver: WebDriver) {
     }
 
     fun open(userId: String): ProfilePage {
-        driver.get("https://stackoverflow.com/users/$userId")
+        driver.get("$URL_USERS_TEMPLATE$userId")
         return this
     }
 

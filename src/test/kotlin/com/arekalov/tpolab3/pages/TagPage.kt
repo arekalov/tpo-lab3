@@ -8,15 +8,24 @@ import java.time.Duration
 
 class TagPage(private val driver: WebDriver) {
 
+    companion object {
+        private const val URL_TAGGED_TEMPLATE = "https://stackoverflow.com/questions/tagged/"
+        private const val XPATH_TAG_TITLE = "//h1[contains(@class,'fs-headline')]"
+        private const val XPATH_QUESTION_ITEMS =
+            "//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]"
+        private const val XPATH_PAGINATION_NEXT = "//a[@rel='next']"
+        private const val XPATH_FIRST_QUESTION_TITLE =
+            "(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3)[1]"
+    }
+
     private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
-    private val tagTitle = By.xpath("//h1[contains(@class,'fs-headline')]")
-    private val questionItems = By.xpath("//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]")
-    private val tagDescription = By.xpath("//div[contains(@class,'js-tag-description') or @itemprop='description']")
-    private val paginationNext = By.xpath("//a[@rel='next']")
+    private val tagTitle = By.xpath(XPATH_TAG_TITLE)
+    private val questionItems = By.xpath(XPATH_QUESTION_ITEMS)
+    private val paginationNext = By.xpath(XPATH_PAGINATION_NEXT)
 
     fun open(tag: String): TagPage {
-        driver.get("https://stackoverflow.com/questions/tagged/$tag")
+        driver.get("$URL_TAGGED_TEMPLATE$tag")
         return this
     }
 
@@ -34,11 +43,7 @@ class TagPage(private val driver: WebDriver) {
 
     fun getFirstQuestionTitle(): String {
         val el = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(
-                By.xpath(
-                    "(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3)[1]"
-                )
-            )
+            ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_FIRST_QUESTION_TITLE))
         )
         return el.text.trim()
     }

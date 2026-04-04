@@ -9,14 +9,24 @@ import java.time.Duration
 
 class AskQuestionPage(private val driver: WebDriver) {
 
+    companion object {
+        private const val XPATH_TITLE = "//input[@id='title' or @name='title']"
+        private const val XPATH_BODY = "//div[@class='wmd-input' or @id='wmd-input']"
+        private const val XPATH_TAGS =
+            "//input[contains(@class,'s-input') and @name='tagnames']"
+        private const val XPATH_REVIEW = "//button[contains(.,'Review your question')]"
+        private const val XPATH_SUBMIT = "//button[contains(.,'Post your question')]"
+        private const val XPATH_TITLE_ERROR =
+            "//*[contains(@class,'js-title-error') or contains(@class,'d-error')]"
+    }
+
     private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
-    private val titleField = By.xpath("//input[@id='title' or @name='title']")
-    private val bodyEditor = By.xpath("//div[@class='wmd-input' or @id='wmd-input']")
-    private val tagsField = By.xpath("//input[contains(@class,'s-input') and @name='tagnames']")
-    private val reviewButton = By.xpath("//button[contains(.,'Review your question')]")
-    private val submitButton = By.xpath("//button[contains(.,'Post your question')]")
-    private val draftIndicator = By.xpath("//*[contains(@class,'js-draft-saved') or contains(text(),'Draft saved')]")
+    private val titleField = By.xpath(XPATH_TITLE)
+    private val bodyEditor = By.xpath(XPATH_BODY)
+    private val tagsField = By.xpath(XPATH_TAGS)
+    private val reviewButton = By.xpath(XPATH_REVIEW)
+    private val submitButton = By.xpath(XPATH_SUBMIT)
 
     fun enterTitle(title: String): AskQuestionPage {
         val field = wait.until(ExpectedConditions.elementToBeClickable(titleField))
@@ -50,8 +60,6 @@ class AskQuestionPage(private val driver: WebDriver) {
     }
 
     fun isTitleErrorVisible(): Boolean {
-        return driver.findElements(
-            By.xpath("//*[contains(@class,'js-title-error') or contains(@class,'d-error')]")
-        ).any { it.isDisplayed }
+        return driver.findElements(By.xpath(XPATH_TITLE_ERROR)).any { it.isDisplayed }
     }
 }

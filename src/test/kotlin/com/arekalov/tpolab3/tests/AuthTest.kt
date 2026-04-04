@@ -4,12 +4,19 @@ import com.arekalov.tpolab3.BaseTest
 import com.arekalov.tpolab3.Config
 import com.arekalov.tpolab3.pages.LoginPage
 import com.arekalov.tpolab3.pages.MainPage
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.By
+import org.openqa.selenium.support.ui.ExpectedConditions
 
 class AuthTest : BaseTest() {
+
+    companion object {
+        private const val URL_FRAGMENT_STACKOVERFLOW = "stackoverflow.com"
+        private const val URL_FRAGMENT_LOGIN = "login"
+        private const val XPATH_LOGIN_ERROR =
+            "//*[contains(@class,'js-error-message') or contains(@class,'message-error')]"
+    }
 
     @Test
     fun `successful login with valid credentials`() {
@@ -18,12 +25,7 @@ class AuthTest : BaseTest() {
             .loginAs(Config.email, Config.password)
 
         wait.until(
-            ExpectedConditions.or(
-                ExpectedConditions.urlContains("stackoverflow.com"),
-                ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//a[contains(@href,'/users/logout')]")
-                )
-            )
+            ExpectedConditions.urlContains(URL_FRAGMENT_STACKOVERFLOW)
         )
         assertTrue(mainPage.isLoggedIn(), "User should be logged in after successful authentication")
     }
@@ -35,13 +37,10 @@ class AuthTest : BaseTest() {
             .enterEmail(Config.email)
             .enterPassword("wrong_password_123!")
             .submitExpectingError()
-
         wait.until(
             ExpectedConditions.or(
-                ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//*[contains(@class,'js-error-message') or contains(@class,'message-error')]")
-                ),
-                ExpectedConditions.urlContains("login")
+                ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_LOGIN_ERROR)),
+                ExpectedConditions.urlContains(URL_FRAGMENT_LOGIN)
             )
         )
         assertTrue(loginPage.hasError(), "Error message should appear on invalid credentials")
@@ -49,8 +48,9 @@ class AuthTest : BaseTest() {
 
     @Test
     fun `login page is accessible from main page`() {
-        val loginPage = MainPage(driver).open().clickLogin()
-        wait.until(ExpectedConditions.urlContains("login"))
-        assertTrue(driver.currentUrl.contains("login"), "Should navigate to login page")
+        MainPage(driver).open().clickLogin()
+        wait.until(ExpectedConditions.urlContains(URL_FRAGMENT_LOGIN))
+        val currentUrl = driver.currentUrl ?: "null"
+        assertTrue(currentUrl.contains(URL_FRAGMENT_LOGIN), "Should navigate to login page")
     }
 }

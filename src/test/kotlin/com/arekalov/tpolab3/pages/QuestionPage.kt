@@ -8,18 +8,43 @@ import java.time.Duration
 
 class QuestionPage(private val driver: WebDriver) {
 
+    companion object {
+        private const val XPATH_QUESTION_TITLE =
+            "//h1[@itemprop='name']/a | //h1[contains(@class,'fs-headline1')]"
+        private const val XPATH_ANSWER_EDITOR =
+            "//div[@id='wmd-input' or contains(@class,'wmd-input')]"
+        private const val XPATH_POST_ANSWER = "//button[contains(.,'Post Your Answer')]"
+        private const val XPATH_UPVOTE_FIRST = "(//button[contains(@class,'js-vote-up-btn')])[1]"
+        private const val XPATH_DOWNVOTE_FIRST = "(//button[contains(@class,'js-vote-down-btn')])[1]"
+        private const val XPATH_VOTE_COUNT_FIRST = "(//div[contains(@class,'js-vote-count')])[1]"
+        private const val XPATH_ADD_COMMENT_FIRST =
+            "(//a[contains(@class,'js-add-link') and contains(.,'comment')])[1]"
+        private const val XPATH_COMMENT_TEXTAREA =
+            "//textarea[contains(@class,'js-comment-text-input')]"
+        private const val XPATH_SUBMIT_COMMENT =
+            "//button[contains(@class,'js-comment-submit-button') or contains(.,'Add comment')]"
+        private const val XPATH_ACCEPT_ANSWER_FIRST =
+            "(//a[contains(@class,'js-mark-as-accepted-answer')])[1]"
+
+        private fun xpathCommentBodyContaining(partialText: String) =
+            "//*[contains(@class,'comment-body') and contains(.,'$partialText')]"
+
+        private fun xpathAnswerCellContaining(partialText: String) =
+            "//div[contains(@class,'answercell')]//div[contains(.,'$partialText')]"
+    }
+
     private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
-    private val questionTitle = By.xpath("//h1[@itemprop='name']/a | //h1[contains(@class,'fs-headline1')]")
-    private val answerEditor = By.xpath("//div[@id='wmd-input' or contains(@class,'wmd-input')]")
-    private val postAnswerButton = By.xpath("//button[contains(.,'Post Your Answer')]")
-    private val upvoteButton = By.xpath("(//button[contains(@class,'js-vote-up-btn')])[1]")
-    private val downvoteButton = By.xpath("(//button[contains(@class,'js-vote-down-btn')])[1]")
-    private val voteCount = By.xpath("(//div[contains(@class,'js-vote-count')])[1]")
-    private val addCommentLink = By.xpath("(//a[contains(@class,'js-add-link') and contains(.,'comment')])[1]")
-    private val commentTextarea = By.xpath("//textarea[contains(@class,'js-comment-text-input')]")
-    private val submitCommentButton = By.xpath("//button[contains(@class,'js-comment-submit-button') or contains(.,'Add comment')]")
-    private val acceptAnswerButton = By.xpath("(//a[contains(@class,'js-mark-as-accepted-answer')])[1]")
+    private val questionTitle = By.xpath(XPATH_QUESTION_TITLE)
+    private val answerEditor = By.xpath(XPATH_ANSWER_EDITOR)
+    private val postAnswerButton = By.xpath(XPATH_POST_ANSWER)
+    private val upvoteButton = By.xpath(XPATH_UPVOTE_FIRST)
+    private val downvoteButton = By.xpath(XPATH_DOWNVOTE_FIRST)
+    private val voteCount = By.xpath(XPATH_VOTE_COUNT_FIRST)
+    private val addCommentLink = By.xpath(XPATH_ADD_COMMENT_FIRST)
+    private val commentTextarea = By.xpath(XPATH_COMMENT_TEXTAREA)
+    private val submitCommentButton = By.xpath(XPATH_SUBMIT_COMMENT)
+    private val acceptAnswerButton = By.xpath(XPATH_ACCEPT_ANSWER_FIRST)
 
     fun getTitle(): String {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(questionTitle)).text
@@ -70,9 +95,7 @@ class QuestionPage(private val driver: WebDriver) {
     }
 
     fun isCommentVisible(partialText: String): Boolean {
-        return driver.findElements(
-            By.xpath("//*[contains(@class,'comment-body') and contains(.,'$partialText')]")
-        ).isNotEmpty()
+        return driver.findElements(By.xpath(xpathCommentBodyContaining(partialText))).isNotEmpty()
     }
 
     fun acceptFirstAnswer(): QuestionPage {
@@ -81,8 +104,6 @@ class QuestionPage(private val driver: WebDriver) {
     }
 
     fun isAnswerPosted(partialText: String): Boolean {
-        return driver.findElements(
-            By.xpath("//div[contains(@class,'answercell')]//div[contains(.,'$partialText')]")
-        ).isNotEmpty()
+        return driver.findElements(By.xpath(xpathAnswerCellContaining(partialText))).isNotEmpty()
     }
 }

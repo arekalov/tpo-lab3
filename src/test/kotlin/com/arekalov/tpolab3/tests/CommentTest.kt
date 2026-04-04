@@ -12,16 +12,22 @@ import org.openqa.selenium.By
 class CommentTest : BaseTest() {
 
     companion object {
-        const val TEST_QUESTION_URL = "https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array"
+        const val TEST_QUESTION_URL =
+            "https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array"
+        private const val XPATH_LOGOUT = "//a[contains(@href,'/users/logout')]"
+        private const val XPATH_ADD_COMMENT_FIRST =
+            "(//a[contains(@class,'js-add-link') and contains(.,'comment')])[1]"
+        private const val XPATH_ADD_COMMENT_ANY =
+            "//a[contains(@class,'js-add-link') and contains(.,'comment')]"
+        private const val XPATH_COMMENT_TEXTAREA =
+            "//textarea[contains(@class,'js-comment-text-input')]"
     }
 
     @BeforeEach
     fun login() {
         LoginPage(driver).open().loginAs(Config.email, Config.password)
         wait.until(
-            ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//a[contains(@href,'/users/logout')]")
-            )
+            ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_LOGOUT))
         )
     }
 
@@ -29,13 +35,9 @@ class CommentTest : BaseTest() {
     fun `add comment link is visible on question page`() {
         driver.get(TEST_QUESTION_URL)
         wait.until(
-            ExpectedConditions.presenceOfElementLocated(
-                By.xpath("(//a[contains(@class,'js-add-link') and contains(.,'comment')])[1]")
-            )
+            ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_ADD_COMMENT_FIRST))
         )
-        val links = driver.findElements(
-            By.xpath("//a[contains(@class,'js-add-link') and contains(.,'comment')]")
-        )
+        val links = driver.findElements(By.xpath(XPATH_ADD_COMMENT_ANY))
         assertTrue(links.isNotEmpty(), "Add comment link should be visible on question page")
     }
 
@@ -43,19 +45,13 @@ class CommentTest : BaseTest() {
     fun `clicking add comment reveals textarea`() {
         driver.get(TEST_QUESTION_URL)
         wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("(//a[contains(@class,'js-add-link') and contains(.,'comment')])[1]")
-            )
+            ExpectedConditions.elementToBeClickable(By.xpath(XPATH_ADD_COMMENT_FIRST))
         ).click()
 
         wait.until(
-            ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//textarea[contains(@class,'js-comment-text-input')]")
-            )
+            ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_COMMENT_TEXTAREA))
         )
-        val textarea = driver.findElements(
-            By.xpath("//textarea[contains(@class,'js-comment-text-input')]")
-        )
+        val textarea = driver.findElements(By.xpath(XPATH_COMMENT_TEXTAREA))
         assertTrue(textarea.isNotEmpty(), "Comment textarea should be visible after clicking add comment")
     }
 
@@ -63,15 +59,11 @@ class CommentTest : BaseTest() {
     fun `comment textarea accepts text input`() {
         driver.get(TEST_QUESTION_URL)
         wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("(//a[contains(@class,'js-add-link') and contains(.,'comment')])[1]")
-            )
+            ExpectedConditions.elementToBeClickable(By.xpath(XPATH_ADD_COMMENT_FIRST))
         ).click()
 
         val textarea = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//textarea[contains(@class,'js-comment-text-input')]")
-            )
+            ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_COMMENT_TEXTAREA))
         )
         val commentText = "This is a selenium test comment"
         textarea.sendKeys(commentText)

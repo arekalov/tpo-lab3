@@ -1,5 +1,6 @@
 package com.arekalov.tpolab3.pages
 
+import com.arekalov.tpolab3.cloudFlare
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.WebDriverWait
@@ -8,11 +9,16 @@ import java.time.Duration
 
 class MainPage(private val driver: WebDriver) {
 
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
-
     companion object {
         const val URL = "https://stackoverflow.com"
+        private const val XPATH_LOGIN_LINK =
+            "//a[@class='s-topbar--item s-topbar--item__unset s-btn s-btn__outlined ws-nowrap js-gps-track']"
+        private const val XPATH_SEARCH_INPUT = "//input[@name='q' and @type='text']"
+        private const val XPATH_ASK_QUESTION = "//a[contains(@href,'/questions/ask')]"
+        private const val XPATH_LOGOUT = "//a[contains(@href,'/users/logout')]"
     }
+
+    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
     fun open(): MainPage {
         driver.get(URL)
@@ -21,9 +27,7 @@ class MainPage(private val driver: WebDriver) {
 
     fun clickLogin(): LoginPage {
         val loginLink = wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[contains(@href, '/users/login') and not(contains(@class,'s-btn--primary'))]")
-            )
+            ExpectedConditions.elementToBeClickable(By.xpath(XPATH_LOGIN_LINK))
         )
         loginLink.click()
         return LoginPage(driver)
@@ -31,9 +35,7 @@ class MainPage(private val driver: WebDriver) {
 
     fun searchFor(query: String): SearchPage {
         val searchBox = wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("//input[@name='q' and @type='text']")
-            )
+            ExpectedConditions.elementToBeClickable(By.xpath(XPATH_SEARCH_INPUT))
         )
         searchBox.clear()
         searchBox.sendKeys(query)
@@ -43,17 +45,16 @@ class MainPage(private val driver: WebDriver) {
 
     fun navigateToAskQuestion(): AskQuestionPage {
         val askBtn = wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("//a[contains(@href,'/questions/ask')]")
-            )
+            ExpectedConditions.elementToBeClickable(By.xpath(XPATH_ASK_QUESTION))
         )
         askBtn.click()
         return AskQuestionPage(driver)
     }
 
     fun isLoggedIn(): Boolean {
-        return driver.findElements(
-            By.xpath("//a[contains(@href,'/users/logout')]")
-        ).isNotEmpty()
+        cloudFlare()
+        val contextActionButton = driver.findElement(By.xpath("//a[contains(@class,'js-site-switcher-button') and @aria-label='Site switcher']"))
+        contextActionButton.click()
+        return driver.findElements(By.xpath("//a[@class='js-gps-track'][normalize-space()='log out']")).isNotEmpty()
     }
 }

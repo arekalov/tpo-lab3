@@ -8,12 +8,24 @@ import java.time.Duration
 
 class SearchPage(private val driver: WebDriver) {
 
+    companion object {
+        private const val URL_TAGGED_TEMPLATE = "https://stackoverflow.com/questions/tagged/"
+        private const val XPATH_RESULT_ITEMS =
+            "//div[contains(@class,'question-summary') or contains(@class,'s-post-summary')]"
+        private const val XPATH_NO_RESULTS =
+            "//*[contains(text(),'No results found') or contains(text(),'no results')]"
+        private const val XPATH_SEARCH_INPUT = "//input[@name='q' and @type='text']"
+        private const val XPATH_FIRST_RESULT_TITLE =
+            "(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3)[1]"
+        private const val XPATH_FIRST_RESULT_LINK =
+            "(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3/a)[1]"
+    }
+
     private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
-    private val resultItems = By.xpath("//div[contains(@class,'question-summary') or contains(@class,'s-post-summary')]")
-    private val noResultsMessage = By.xpath("//*[contains(text(),'No results found') or contains(text(),'no results')]")
-    private val resultCount = By.xpath("//*[contains(@class,'results-header') or contains(@class,'fs-body3')]")
-    private val searchInput = By.xpath("//input[@name='q' and @type='text']")
+    private val resultItems = By.xpath(XPATH_RESULT_ITEMS)
+    private val noResultsMessage = By.xpath(XPATH_NO_RESULTS)
+    private val searchInput = By.xpath(XPATH_SEARCH_INPUT)
 
     fun getResultCount(): Int {
         return driver.findElements(resultItems).size
@@ -29,20 +41,14 @@ class SearchPage(private val driver: WebDriver) {
 
     fun getFirstResultTitle(): String {
         val first = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3)[1]")
-            )
+            ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_FIRST_RESULT_TITLE))
         )
         return first.text
     }
 
     fun clickFirstResult(): QuestionPage {
         val link = wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath(
-                    "(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3/a)[1]"
-                )
-            )
+            ExpectedConditions.elementToBeClickable(By.xpath(XPATH_FIRST_RESULT_LINK))
         )
         link.click()
         return QuestionPage(driver)
@@ -53,7 +59,7 @@ class SearchPage(private val driver: WebDriver) {
     }
 
     fun filterByTag(tag: String): SearchPage {
-        driver.get("https://stackoverflow.com/questions/tagged/$tag")
+        driver.get("$URL_TAGGED_TEMPLATE$tag")
         return this
     }
 }

@@ -13,17 +13,19 @@ import org.openqa.selenium.By
 class AnswerTest : BaseTest() {
 
     companion object {
-        // A sandbox/test question URL that is safe to answer
-        const val TEST_QUESTION_URL = "https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array"
+        const val TEST_QUESTION_URL =
+            "https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array"
+        private const val XPATH_LOGOUT = "//a[contains(@href,'/users/logout')]"
+        private const val XPATH_ANSWER_EDITOR =
+            "//div[@id='wmd-input' or contains(@class,'wmd-input')]"
+        private const val XPATH_POST_ANSWER = "//button[contains(.,'Post Your Answer')]"
     }
 
     @BeforeEach
     fun login() {
         LoginPage(driver).open().loginAs(Config.email, Config.password)
         wait.until(
-            ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//a[contains(@href,'/users/logout')]")
-            )
+            ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_LOGOUT))
         )
     }
 
@@ -32,13 +34,9 @@ class AnswerTest : BaseTest() {
         driver.get(TEST_QUESTION_URL)
 
         wait.until(
-            ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//div[@id='wmd-input' or contains(@class,'wmd-input')]")
-            )
+            ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_ANSWER_EDITOR))
         )
-        val editors = driver.findElements(
-            By.xpath("//div[@id='wmd-input' or contains(@class,'wmd-input')]")
-        )
+        val editors = driver.findElements(By.xpath(XPATH_ANSWER_EDITOR))
         assertTrue(editors.isNotEmpty(), "Answer editor should be visible on the question page")
     }
 
@@ -55,13 +53,9 @@ class AnswerTest : BaseTest() {
         driver.get(TEST_QUESTION_URL)
 
         wait.until(
-            ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[contains(.,'Post Your Answer')]")
-            )
+            ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_POST_ANSWER))
         )
-        val buttons = driver.findElements(
-            By.xpath("//button[contains(.,'Post Your Answer')]")
-        )
+        val buttons = driver.findElements(By.xpath(XPATH_POST_ANSWER))
         assertTrue(buttons.isNotEmpty(), "Post Your Answer button should be present")
     }
 }

@@ -13,6 +13,9 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
 
 abstract class BaseTest {
+    companion object {
+        const val WAIT_DURATION_SEC = 15L
+    }
 
     protected lateinit var driver: WebDriver
     protected lateinit var wait: WebDriverWait
@@ -39,7 +42,7 @@ abstract class BaseTest {
                 ChromeDriver(options).also { SeleniumStealthOptions.getDefault().apply(it) }
             }
         }
-        wait = WebDriverWait(driver, Duration.ofSeconds(15))
+        wait = WebDriverWait(driver, Duration.ofSeconds(WAIT_DURATION_SEC))
         driver.manage().window().maximize()
     }
 
