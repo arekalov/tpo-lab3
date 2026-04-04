@@ -27,6 +27,7 @@ class AuthTest : BaseTest() {
         wait.until(
             ExpectedConditions.urlContains(URL_FRAGMENT_STACKOVERFLOW)
         )
+        mainPage.cloudFlare()
         assertTrue(mainPage.isLoggedIn(), "User should be logged in after successful authentication")
     }
 
@@ -43,6 +44,7 @@ class AuthTest : BaseTest() {
                 ExpectedConditions.urlContains(URL_FRAGMENT_LOGIN)
             )
         )
+        loginPage.cloudFlare()
         assertTrue(loginPage.hasError(), "Error message should appear on invalid credentials")
     }
 

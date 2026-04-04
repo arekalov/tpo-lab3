@@ -18,6 +18,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
     testImplementation("com.github.bramar2:undetectedselenium:d7d9b0ff42")
     testImplementation("com.google.code.gson:gson:2.10.1")
+    testImplementation("net.datafaker:datafaker:2.4.2")
     testRuntimeOnly("org.slf4j:slf4j-simple:2.0.13")
 }
 

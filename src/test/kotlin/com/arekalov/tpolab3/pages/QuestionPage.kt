@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import java.time.Duration
 
-class QuestionPage(private val driver: WebDriver) {
+internal class QuestionPage(private val driver: WebDriver) : BasePage(driver) {
 
     companion object {
         private const val XPATH_QUESTION_TITLE =
@@ -32,8 +32,6 @@ class QuestionPage(private val driver: WebDriver) {
         private fun xpathAnswerCellContaining(partialText: String) =
             "//div[contains(@class,'answercell')]//div[contains(.,'$partialText')]"
     }
-
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
     private val questionTitle = By.xpath(XPATH_QUESTION_TITLE)
     private val answerEditor = By.xpath(XPATH_ANSWER_EDITOR)

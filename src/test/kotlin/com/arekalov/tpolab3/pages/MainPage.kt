@@ -1,24 +1,19 @@
 package com.arekalov.tpolab3.pages
 
-import com.arekalov.tpolab3.cloudFlare
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
-import java.time.Duration
 
-class MainPage(private val driver: WebDriver) {
+internal class MainPage(private val driver: WebDriver) : BasePage(driver) {
 
     companion object {
         const val URL = "https://stackoverflow.com"
         private const val XPATH_LOGIN_LINK =
             "//a[@class='s-topbar--item s-topbar--item__unset s-btn s-btn__outlined ws-nowrap js-gps-track']"
         private const val XPATH_SEARCH_INPUT = "//input[@name='q' and @type='text']"
-        private const val XPATH_ASK_QUESTION = "//a[contains(@href,'/questions/ask')]"
+        private const val XPATH_ASK_QUESTION = "//a[@id='ask-question-button']"
         private const val XPATH_LOGOUT = "//a[contains(@href,'/users/logout')]"
     }
-
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
     fun open(): MainPage {
         driver.get(URL)

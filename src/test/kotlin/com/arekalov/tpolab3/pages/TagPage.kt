@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import java.time.Duration
 
-class TagPage(private val driver: WebDriver) {
+internal class TagPage(private val driver: WebDriver) : BasePage(driver) {
 
     companion object {
         private const val URL_TAGGED_TEMPLATE = "https://stackoverflow.com/questions/tagged/"
@@ -17,8 +17,6 @@ class TagPage(private val driver: WebDriver) {
         private const val XPATH_FIRST_QUESTION_TITLE =
             "(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3)[1]"
     }
-
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
     private val tagTitle = By.xpath(XPATH_TAG_TITLE)
     private val questionItems = By.xpath(XPATH_QUESTION_ITEMS)

@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import java.time.Duration
 
-class LoginPage(private val driver: WebDriver) {
+internal class LoginPage(private val driver: WebDriver) : BasePage(driver)  {
 
     companion object {
         private const val URL_LOGIN = "https://stackoverflow.com/users/login"
@@ -17,8 +17,6 @@ class LoginPage(private val driver: WebDriver) {
         private const val XPATH_ERROR = "//*[@id=\"login-form\"]/div[1]/p"
     }
 
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
-
     private val emailField = By.xpath(XPATH_EMAIL)
     private val passwordField = By.xpath(XPATH_PASSWORD)
     private val submitButton = By.xpath(XPATH_SUBMIT)
@@ -26,6 +24,7 @@ class LoginPage(private val driver: WebDriver) {
 
     fun open(): LoginPage {
         driver.get(URL_LOGIN)
+        acceptCookies()
         return this
     }
 

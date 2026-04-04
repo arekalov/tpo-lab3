@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import java.time.Duration
 
-class ProfilePage(private val driver: WebDriver) {
+internal class ProfilePage(private val driver: WebDriver) : BasePage(driver) {
 
     companion object {
         private const val URL_USERS_TEMPLATE = "https://stackoverflow.com/users/"
@@ -19,8 +19,6 @@ class ProfilePage(private val driver: WebDriver) {
         private const val XPATH_PROFILE_NAV =
             "//a[contains(@href,'/users/') and contains(@class,'avatar')]"
     }
-
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
     private val displayName = By.xpath(XPATH_DISPLAY_NAME)
     private val reputationBadge = By.xpath(XPATH_REPUTATION)

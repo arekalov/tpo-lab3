@@ -2,30 +2,28 @@ package com.arekalov.tpolab3.pages
 
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
+import org.openqa.selenium.Keys.BACK_SPACE
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import java.time.Duration
 
-class AskQuestionPage(private val driver: WebDriver) {
+internal class AskQuestionPage(private val driver: WebDriver) : BasePage(driver) {
 
     companion object {
-        private const val XPATH_TITLE = "//input[@id='title' or @name='title']"
-        private const val XPATH_BODY = "//div[@class='wmd-input' or @id='wmd-input']"
-        private const val XPATH_TAGS =
-            "//input[contains(@class,'s-input') and @name='tagnames']"
-        private const val XPATH_REVIEW = "//button[contains(.,'Review your question')]"
-        private const val XPATH_SUBMIT = "//button[contains(.,'Post your question')]"
+        private const val XPATH_TITLE = "//input[@id='post-title-input']"
+        private const val XPATH_BODY = "//div[@role='textbox']"
+        private const val XPATH_TAGS = "//input[@id='filterInput']"
+        private const val XPATH_SUBMIT = "//button[normalize-space()='Submit to Staging Ground']"
         private const val XPATH_TITLE_ERROR =
-            "//*[contains(@class,'js-title-error') or contains(@class,'d-error')]"
+            "//div[contains(text(),'Title is missing.')] | //div[contains(text(),'Body is missing.')] | //div[contains(@class,'js-warnings-and-errors-container-019d5948-8528-7698-a7d0-3d2d4dba59b2')]//div[@class='s-input-message fc-error s-anchors s-anchors__underlined']"
+        private const val XPATH_TAGS_SPAN = "//*[@id=\"text-input-container\"]/div[1]/div/span/span/*"
     }
-
-    private val wait = WebDriverWait(driver, Duration.ofSeconds(15))
 
     private val titleField = By.xpath(XPATH_TITLE)
     private val bodyEditor = By.xpath(XPATH_BODY)
     private val tagsField = By.xpath(XPATH_TAGS)
-    private val reviewButton = By.xpath(XPATH_REVIEW)
     private val submitButton = By.xpath(XPATH_SUBMIT)
 
     fun enterTitle(title: String): AskQuestionPage {
@@ -44,22 +42,29 @@ class AskQuestionPage(private val driver: WebDriver) {
 
     fun enterTag(tag: String): AskQuestionPage {
         val field = wait.until(ExpectedConditions.elementToBeClickable(tagsField))
+        field.click()
+        while (field.findElements(By.xpath(XPATH_TAGS_SPAN)).isNotEmpty()) {
+            field.sendKeys(BACK_SPACE)
+        }
         field.sendKeys(tag)
         field.sendKeys(Keys.ENTER)
-        return this
-    }
-
-    fun clickReview(): AskQuestionPage {
-        wait.until(ExpectedConditions.elementToBeClickable(reviewButton)).click()
+        clickInBody()
         return this
     }
 
     fun submitQuestion(): QuestionPage {
+        driver.findElements(submitButton)
         wait.until(ExpectedConditions.elementToBeClickable(submitButton)).click()
         return QuestionPage(driver)
     }
 
-    fun isTitleErrorVisible(): Boolean {
-        return driver.findElements(By.xpath(XPATH_TITLE_ERROR)).any { it.isDisplayed }
+    fun isTitleErrorVisible(): AskQuestionPage {
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(XPATH_TITLE_ERROR))).isNotEmpty()
+        return this
+    }
+
+    fun clickInBody(): AskQuestionPage {
+        driver.findElement(By.tagName("body")).click()
+        return this
     }
 }
