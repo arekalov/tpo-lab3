@@ -1,5 +1,6 @@
 package com.arekalov.tpolab3.page
 
+import io.qameta.allure.Step
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -8,26 +9,12 @@ internal class MainPage(driver: WebDriver) : BasePage(driver) {
 
     companion object {
         const val URL = "https://stackoverflow.com"
-
-        // список вопросов на главной
         private const val XPATH_QUESTION_ITEMS = "//div[@id='questions']//div"
-
-        // заголовок первого вопроса
         private const val XPATH_FIRST_QUESTION_TITLE = "(//div[contains(@class,'s-post-summary')]//h3/a)[1]"
-
-        // строка поиска в топбаре
         private const val XPATH_SEARCH_INPUT = "//input[@name='q' and @type='text']"
-
-        // ссылка на теги в сайдбаре
         private const val XPATH_TAGS_NAV = "//ol[@class='nav-links']//ol[@class='nav-links']/*"
-
-        // кнопка Ask Question
         private const val XPATH_ASK_QUESTION = "//a[contains(@href,'/questions/ask')]"
-
-        // кнопка Log in в топбаре
         private const val XPATH_LOGIN_LINK = "//a[@class='s-topbar--item s-topbar--item__unset s-btn s-btn__outlined ws-nowrap js-gps-track']"
-
-        // ссылка на профиль в топбаре (аватар)
         private const val XPATH_PROFILE_LINK = "//a[contains(@href,'/users/') and contains(@class,'s-topbar--item')]"
     }
 

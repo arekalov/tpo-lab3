@@ -95,15 +95,6 @@ internal class QuestionPage(driver: WebDriver) : BasePage(driver) {
 
     fun isSaveLoginTooltipVisible(): Boolean = isDisplayed(By.xpath(XPATH_VOTE_SIGNUP_TOOLTIP))
 
-    fun isDeleteLinkVisible(): Boolean = isDisplayed(By.xpath(XPATH_DELETE_LINK))
-
-    fun clickDelete(): QuestionPage {
-        waitClickable(By.xpath(XPATH_DELETE_LINK)).click()
-        return this
-    }
-
-    fun isDeleteConfirmDialogVisible(): Boolean = isDisplayed(By.xpath(XPATH_DELETE_CONFIRM_DIALOG))
-
     fun isAnswerEditorVisible(): Boolean =
         isDisplayed(By.xpath(XPATH_ANSWER_EDITOR))
 

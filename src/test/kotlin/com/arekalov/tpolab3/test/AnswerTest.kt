@@ -17,7 +17,7 @@ class AnswerTest : BaseTest() {
     companion object {
         // вопрос с активным обсуждением, гарантированно имеет форму ответа
         private const val QUESTION_URL =
-            "https://stackoverflow.com/questions/79920521/permission-denied-when-running-executable-with-systemd"
+            "https://stackoverflow.com/questions/79920001/playwright-giving-me-hard-time-running-a-browser-on-existing-chrome-profile"
     }
 
     private lateinit var questionPage: QuestionPage

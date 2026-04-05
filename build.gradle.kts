@@ -74,7 +74,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    systemProperty("browser", System.getProperty("browser", "chrome"))
+    systemProperty("browser", System.getProperty("browser", "firefox"))
 }
 
 val testFilter = System.getProperty("tests")
@@ -95,12 +95,6 @@ val testFirefox by tasks.registering(Test::class) {
     classpath = sourceSets["test"].runtimeClasspath
     if (testFilter != null) filter { includeTestsMatching(testFilter) }
     outputs.upToDateWhen { false }
-    mustRunAfter() // нет зависимостей от testChrome
-}
-
-// таск для параллельного запуска обоих браузеров
-tasks.register("testAllBrowsers") {
-    dependsOn(testChrome, testFirefox)
 }
 
 kotlin {
