@@ -22,7 +22,6 @@ class AskQuestionTest : BaseTest() {
     @BeforeEach
     fun login() {
         val mainMage = LoginPage(driver).open().loginAs(Config.email, Config.password)
-        mainMage.cloudFlare()
         assertTrue(mainMage.isLoggedIn())
     }
 
@@ -57,7 +56,5 @@ class AskQuestionTest : BaseTest() {
         askPage.enterTag("kotlin")
 
         askPage.submitQuestion()
-
-        askPage.waitUntilRecaptchaResolved()
     }
 }

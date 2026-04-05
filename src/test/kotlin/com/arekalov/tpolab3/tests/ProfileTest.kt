@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.By
 
-class ProfileTest : BaseTest() {
+class ProfileTest() : BaseTest() {
 
     companion object {
         const val PUBLIC_PROFILE_URL = "https://stackoverflow.com/users/22656/jon-skeet"

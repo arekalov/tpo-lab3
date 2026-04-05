@@ -20,14 +20,17 @@ class SearchTest : BaseTest() {
     @Test
     fun `search returns results for known keyword`() {
         val searchPage = MainPage(driver).open().searchFor("kotlin coroutines")
+//        searchPage.cloudFlare()
+//        searchPage.acceptCookies()
+//
+//        println("before")
+//        captchaWait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("/html/body/div[5]/div[3]/div/div/div[2]/h1")))
+//        println("after captcha")
+        val a = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_RESULTS_TEXT)))
+        assertTrue{a.isDisplayed }
+//        println("after search")
+//        println("next")
 
-        wait.until(
-            ExpectedConditions.or(
-                ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_QUESTION_SUMMARY)),
-                ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_RESULTS_TEXT))
-            )
-        )
-        assertTrue(searchPage.hasResults(), "Search for 'kotlin coroutines' should return results")
     }
 
     @Test

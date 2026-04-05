@@ -12,14 +12,64 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.41.0")
-    testImplementation("io.github.bonigarcia:webdrivermanager:5.9.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
-    testImplementation("com.github.bramar2:undetectedselenium:d7d9b0ff42")
-    testImplementation("com.google.code.gson:gson:2.10.1")
     testImplementation("net.datafaker:datafaker:2.4.2")
-    testRuntimeOnly("org.slf4j:slf4j-simple:2.0.13")
+
+    // Source: https://mvnrepository.com/artifact/com.alibaba/fastjson
+    implementation("com.alibaba:fastjson:2.0.61")
+    implementation("org.slf4j:slf4j-simple:2.0.9")
+
+    // Selenium Java (без дочерних модулей)
+    implementation("org.seleniumhq.selenium:selenium-java:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-chrome-driver")
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-support")
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-ie-driver")
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-edge-driver")
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-firefox-driver")
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-remote-driver")
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-safari-driver")
+    }
+//    implementation("org.seleniumhq.selenium:selenium-devtools-v146:4.20.0")
+
+    // Selenium API
+    implementation("org.seleniumhq.selenium:selenium-api:4.20.0")
+
+    // Chrome Driver
+    implementation("org.seleniumhq.selenium:selenium-chrome-driver:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+    }
+
+    // Selenium Support
+    implementation("org.seleniumhq.selenium:selenium-support:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+    }
+
+    // IE Driver
+    implementation("org.seleniumhq.selenium:selenium-ie-driver:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+    }
+
+    // Edge Driver
+    implementation("org.seleniumhq.selenium:selenium-edge-driver:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+    }
+
+    // Firefox Driver
+    implementation("org.seleniumhq.selenium:selenium-firefox-driver:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+    }
+
+    // Remote Driver
+    implementation("org.seleniumhq.selenium:selenium-remote-driver:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+    }
+
+    // Safari Driver
+    implementation("org.seleniumhq.selenium:selenium-safari-driver:4.20.0") {
+        exclude(group = "org.seleniumhq.selenium", module = "selenium-api")
+    }
 }
 
 tasks.test {

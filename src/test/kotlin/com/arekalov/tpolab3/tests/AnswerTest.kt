@@ -23,12 +23,9 @@ class AnswerTest : BaseTest() {
 
     @BeforeEach
     fun login() {
-        LoginPage(driver).open().loginAs(Config.email, Config.password)
-        wait.until(
-            ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_LOGOUT))
-        )
+        val mainMage = LoginPage(driver).open().loginAs(Config.email, Config.password)
+        assertTrue(mainMage.isLoggedIn())
     }
-
     @Test
     fun `answer editor is visible on question page`() {
         driver.get(TEST_QUESTION_URL)

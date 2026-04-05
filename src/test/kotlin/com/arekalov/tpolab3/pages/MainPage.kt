@@ -10,7 +10,7 @@ internal class MainPage(private val driver: WebDriver) : BasePage(driver) {
         const val URL = "https://stackoverflow.com"
         private const val XPATH_LOGIN_LINK =
             "//a[@class='s-topbar--item s-topbar--item__unset s-btn s-btn__outlined ws-nowrap js-gps-track']"
-        private const val XPATH_SEARCH_INPUT = "//input[@name='q' and @type='text']"
+        private const val XPATH_SEARCH_INPUT = "//*[@id=\"search\"]/div/input"
         private const val XPATH_ASK_QUESTION = "//a[@id='ask-question-button']"
         private const val XPATH_LOGOUT = "//a[contains(@href,'/users/logout')]"
     }
@@ -47,7 +47,6 @@ internal class MainPage(private val driver: WebDriver) : BasePage(driver) {
     }
 
     fun isLoggedIn(): Boolean {
-        cloudFlare()
         val contextActionButton = driver.findElement(By.xpath("//a[contains(@class,'js-site-switcher-button') and @aria-label='Site switcher']"))
         contextActionButton.click()
         return driver.findElements(By.xpath("//a[@class='js-gps-track'][normalize-space()='log out']")).isNotEmpty()
