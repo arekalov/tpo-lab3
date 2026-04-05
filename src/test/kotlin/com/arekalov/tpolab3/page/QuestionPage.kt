@@ -13,6 +13,11 @@ internal class QuestionPage(driver: WebDriver) : BasePage(driver) {
         private const val XPATH_TAGS = "//div[@class='d-flex ps-relative fw-wrap']//li"
         private const val XPATH_ANSWERS = "//div[@id='answers']//div[contains(@class,'answer')]"
         private const val XPATH_ACCEPTED_ANSWER = "//div[contains(@class,'answer') and contains(@class,'accepted-answer')]"
+        private const val XPATH_SGNUP_ERROR_TITLE = "//div[@class='message-text']"
+
+        private const val XPATH_ANSWER_EDITOR = "//div[@id='js-stacks-editor-container']"
+        private const val XPATH_ANSWER_MULTILINE = "//div[@role='textbox']"
+        private const val XPATH_POST_ANSWER_BUTTON = "//button[@id='submit-button']"
     }
 
     fun getTitle(): String =
@@ -29,4 +34,27 @@ internal class QuestionPage(driver: WebDriver) : BasePage(driver) {
 
     fun hasAcceptedAnswer(): Boolean =
         isDisplayed(By.xpath(XPATH_ACCEPTED_ANSWER))
+
+    fun isAnswerEditorVisible(): Boolean =
+        isDisplayed(By.xpath(XPATH_ANSWER_EDITOR))
+
+    fun isErrorVisible(): Boolean =
+        isDisplayed(By.xpath(XPATH_SGNUP_ERROR_TITLE))
+
+    fun fillAnswer(text: String): QuestionPage {
+        val editor = waitClickable(By.xpath(XPATH_ANSWER_EDITOR))
+        scrollTo(editor)
+        editor.click()
+        val box = waitVisible(By.xpath(XPATH_ANSWER_MULTILINE))
+        box.click()
+        box.sendKeys(text)
+        return this
+    }
+
+    fun clickPostAnswer(): QuestionPage {
+        val button = waitClickable(By.xpath(XPATH_POST_ANSWER_BUTTON))
+        scrollTo(button)
+        button.click()
+        return this
+    }
 }
