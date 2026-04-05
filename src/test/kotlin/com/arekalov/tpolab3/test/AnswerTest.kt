@@ -17,7 +17,7 @@ class AnswerTest : BaseTest() {
     companion object {
         // вопрос с активным обсуждением, гарантированно имеет форму ответа
         private const val QUESTION_URL =
-            "https://stackoverflow.com/questions/79920455/how-i-can-forced-the-program-to-flush-position-of-fonction-when-its-not-foncti"
+            "https://stackoverflow.com/questions/79920521/permission-denied-when-running-executable-with-systemd"
     }
 
     private lateinit var questionPage: QuestionPage

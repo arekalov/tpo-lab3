@@ -38,7 +38,7 @@ class LoginPageTest : BaseTest() {
             .fillEmail(Config.email)
             .fillPassword(Config.password)
             .submitLogin()
-        waitForUrl(MainPage.URL)
+        driver.get(MainPage.URL)
         assertTrue(loginPage.isLoggedIn(), "После входа должен отображаться аватар пользователя")
     }
 

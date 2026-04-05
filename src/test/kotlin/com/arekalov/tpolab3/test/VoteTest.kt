@@ -47,7 +47,7 @@ class VoteTest : BaseTest() {
     fun `guest clicking upvote shows tooltip about insufficient reputation`() {
         questionPage.clickUpvote()
         assertTrue(
-            questionPage.isVoteTooltipVisible(),
+            questionPage.isSaveLoginTooltipVisible(),
             "Гость при голосовании должен видеть сообщение о необходимости залогироваться"
         )
     }
@@ -56,7 +56,7 @@ class VoteTest : BaseTest() {
     fun `guest clicking downvote shows tooltip about insufficient reputation`() {
         questionPage.clickDownvote()
         assertTrue(
-            questionPage.isVoteTooltipVisible(),
+            questionPage.isSaveLoginTooltipVisible(),
             "Гость при голосовании должен видеть сообщение о необходимости залогироваться"
         )
     }
