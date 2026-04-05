@@ -26,6 +26,9 @@ internal class MainPage(driver: WebDriver) : BasePage(driver) {
 
         // кнопка Log in в топбаре
         private const val XPATH_LOGIN_LINK = "//a[@class='s-topbar--item s-topbar--item__unset s-btn s-btn__outlined ws-nowrap js-gps-track']"
+
+        // ссылка на профиль в топбаре (аватар)
+        private const val XPATH_PROFILE_LINK = "//a[contains(@href,'/users/') and contains(@class,'s-topbar--item')]"
     }
 
     fun open(): MainPage {
@@ -65,5 +68,10 @@ internal class MainPage(driver: WebDriver) : BasePage(driver) {
     fun clickFirstQuestion(): QuestionPage {
         waitClickable(By.xpath(XPATH_FIRST_QUESTION_TITLE)).click()
         return QuestionPage(driver)
+    }
+
+    fun clickProfile(): ProfilePage {
+        waitClickable(By.xpath(XPATH_PROFILE_LINK)).click()
+        return ProfilePage(driver)
     }
 }

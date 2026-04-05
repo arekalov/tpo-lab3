@@ -13,7 +13,7 @@ internal open class BasePage(protected val driver: WebDriver) {
     companion object {
         private const val XPATH_COOKIES_BUTTON = "//*[@id='onetrust-accept-btn-handler']"
         private const val WAIT_SEC = 30L
-        private const val COOKIES_WAIT_SEC = 5L
+        private const val COOKIES_WAIT_SEC = 10L
     }
 
     protected val wait = WebDriverWait(driver, Duration.ofSeconds(WAIT_SEC))
@@ -42,12 +42,19 @@ internal open class BasePage(protected val driver: WebDriver) {
         (driver as JavascriptExecutor).executeScript("arguments[0].scrollIntoView(true);", element)
     }
 
+    protected fun jsClick(element: WebElement) {
+        (driver as JavascriptExecutor).executeScript("arguments[0].click();", element)
+    }
+
     fun acceptCookies() {
         try {
             val cookiesWait = WebDriverWait(driver, Duration.ofSeconds(COOKIES_WAIT_SEC))
             cookiesWait.until(
                 ExpectedConditions.elementToBeClickable(By.xpath(XPATH_COOKIES_BUTTON))
             ).click()
+            cookiesWait.until(
+                ExpectedConditions.invisibilityOfElementLocated(By.id("onetrust-banner-sdk"))
+            )
         } catch (_: Exception) {
         }
     }
