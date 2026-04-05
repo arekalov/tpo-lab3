@@ -25,7 +25,7 @@ internal class MainPage(driver: WebDriver) : BasePage(driver) {
         private const val XPATH_ASK_QUESTION = "//a[contains(@href,'/questions/ask')]"
 
         // кнопка Log in в топбаре
-        private const val XPATH_LOGIN_LINK = "//a[contains(@class,'s-topbar--item') and contains(.,'Log in')]"
+        private const val XPATH_LOGIN_LINK = "//a[@class='s-topbar--item s-topbar--item__unset s-btn s-btn__outlined ws-nowrap js-gps-track']"
     }
 
     fun open(): MainPage {

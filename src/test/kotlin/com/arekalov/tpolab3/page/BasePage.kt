@@ -53,4 +53,13 @@ internal open class BasePage(protected val driver: WebDriver) {
         } catch (_: Exception) {
         }
     }
+
+    fun closeGoogle() {
+        try {
+            (driver as JavascriptExecutor).executeScript("""
+            document.getElementById('credential_picker_container')?.remove();
+        """.trimIndent())
+        } catch (_: Exception) {
+        }
+    }
 }
