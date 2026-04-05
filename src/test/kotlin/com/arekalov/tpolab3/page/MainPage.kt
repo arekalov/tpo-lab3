@@ -1,0 +1,64 @@
+package com.arekalov.tpolab3.page
+
+import org.openqa.selenium.By
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui.ExpectedConditions
+
+internal class MainPage(driver: WebDriver) : BasePage(driver) {
+
+    companion object {
+        const val URL = "https://stackoverflow.com"
+
+        // список вопросов на главной
+        private const val XPATH_QUESTION_ITEMS = "//div[@id='questions']//div"
+
+        // заголовок первого вопроса
+        private const val XPATH_FIRST_QUESTION_TITLE = "(//div[contains(@class,'s-post-summary')]//h3/a)[1]"
+
+        // строка поиска в топбаре
+        private const val XPATH_SEARCH_INPUT = "//input[@name='q' and @type='text']"
+
+        // ссылка на теги в сайдбаре
+        private const val XPATH_TAGS_NAV = "//ol[@class='nav-links']//ol[@class='nav-links']/*"
+
+        // кнопка Ask Question
+        private const val XPATH_ASK_QUESTION = "//a[contains(@href,'/questions/ask')]"
+
+        // кнопка Log in в топбаре
+        private const val XPATH_LOGIN_LINK = "//a[contains(@class,'s-topbar--item') and contains(.,'Log in')]"
+    }
+
+    fun open(): MainPage {
+        driver.get(URL)
+        return this
+    }
+
+    fun hasQuestions(): Boolean = waitVisible(By.xpath(XPATH_QUESTION_ITEMS)).isDisplayed
+
+    fun isSearchBarVisible(): Boolean = waitVisible(By.xpath(XPATH_SEARCH_INPUT)).isDisplayed
+
+    fun isTagsNavVisible(): Boolean = waitVisible(By.xpath(XPATH_TAGS_NAV)).isDisplayed
+
+    fun isAskQuestionButtonVisible(): Boolean = waitVisible(By.xpath(XPATH_ASK_QUESTION)).isDisplayed
+
+    fun getFirstQuestionTitle(): String =
+        waitVisible(By.xpath(XPATH_FIRST_QUESTION_TITLE)).text.trim()
+
+    fun clickLogin(): LoginPage {
+        waitClickable(By.xpath(XPATH_LOGIN_LINK)).click()
+        return LoginPage(driver)
+    }
+
+    fun searchFor(query: String): SearchPage {
+        val input = waitClickable(By.xpath(XPATH_SEARCH_INPUT))
+        input.clear()
+        input.sendKeys(query)
+        input.submit()
+        return SearchPage(driver)
+    }
+
+    fun navigateToAskQuestion(): AskQuestionPage {
+        waitClickable(By.xpath(XPATH_ASK_QUESTION)).click()
+        return AskQuestionPage(driver)
+    }
+}
