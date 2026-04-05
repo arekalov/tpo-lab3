@@ -2,7 +2,6 @@ package com.arekalov.tpolab3.page
 
 import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -29,11 +28,10 @@ internal open class BasePage(protected val driver: WebDriver) {
         wait.until(ExpectedConditions.elementToBeClickable(by))
 
     protected fun isDisplayed(by: By): Boolean =
-        try {
-            waitVisible(by).isDisplayed
-        } catch (_: Exception) {
-            false
-        }
+        waitVisible(by).isDisplayed
+
+    protected fun isEnabled(by: By): Boolean =
+        waitClickable(by).isEnabled
 
 
     protected fun waitForUrl(fragment: String) {
@@ -56,9 +54,11 @@ internal open class BasePage(protected val driver: WebDriver) {
 
     fun closeGoogle() {
         try {
-            (driver as JavascriptExecutor).executeScript("""
+            (driver as JavascriptExecutor).executeScript(
+                """
             document.getElementById('credential_picker_container')?.remove();
-        """.trimIndent())
+        """.trimIndent()
+            )
         } catch (_: Exception) {
         }
     }
