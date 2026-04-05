@@ -61,4 +61,9 @@ internal class MainPage(driver: WebDriver) : BasePage(driver) {
         waitClickable(By.xpath(XPATH_ASK_QUESTION)).click()
         return AskQuestionPage(driver)
     }
+
+    fun clickFirstQuestion(): QuestionPage {
+        waitClickable(By.xpath(XPATH_FIRST_QUESTION_TITLE)).click()
+        return QuestionPage(driver)
+    }
 }

@@ -22,8 +22,18 @@ internal open class BasePage(protected val driver: WebDriver) {
     protected fun waitVisible(by: By): WebElement =
         wait.until(ExpectedConditions.visibilityOfElementLocated(by))
 
+    protected fun waitVisibleElements(by: By): List<WebElement> =
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by))
+
     protected fun waitClickable(by: By): WebElement =
         wait.until(ExpectedConditions.elementToBeClickable(by))
+
+    protected fun isDisplayed(by: By): Boolean =
+        try {
+            waitVisible(by).isDisplayed
+        } catch (_: Exception) {
+            false
+        }
 
 
     protected fun waitForUrl(fragment: String) {
